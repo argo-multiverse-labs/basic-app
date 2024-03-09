@@ -6,13 +6,10 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          vcluster: "true"
+  - clusters: {} # Automatically use all clusters defined within Argo CD
   template:
     metadata:
-      name: '{{.name}}-ba' # 'name' field of the Secret
+      name: '{{.name}}-ba-{{ randAlpha 6 | lower }}' # 'name' field of the Secret
     spec:
       project: "default"
       source:
