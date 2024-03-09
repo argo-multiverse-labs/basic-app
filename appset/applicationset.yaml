@@ -11,11 +11,17 @@ spec:
     metadata:
       name: '{{.name}}-guestbook' # 'name' field of the Secret
     spec:
-      project: "my-project"
+      project: "default"
       source:
-        repoURL: https://github.com/argoproj/argocd-example-apps/
-        targetRevision: HEAD
-        path: guestbook
+        repoURL: https://github.com/argo-multiverse-labs/basic-app
+        targetRevision: main
+        path: app-chart
       destination:
         server: '{{.server}}' # 'server' field of the secret
-        namespace: guestbook
+        namespace: apps
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
