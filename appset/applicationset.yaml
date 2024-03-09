@@ -12,7 +12,7 @@ spec:
           vcluster: "true"
   template:
     metadata:
-      name: '{{.name}}-ba-{{ randAlpha 6 | lower }}'
+      name: '{{.name}}-ba'
     spec:
       project: "default"
       source:
