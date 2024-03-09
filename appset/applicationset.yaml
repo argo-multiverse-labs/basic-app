@@ -9,7 +9,7 @@ spec:
   - clusters: {} # Automatically use all clusters defined within Argo CD
   template:
     metadata:
-      name: '{{.name}}-ba-{{ random.Alpha 6 }}' # 'name' field of the Secret
+      name: '{{.name}}-ba-{{ randAlpha 6 }}' # 'name' field of the Secret
     spec:
       project: "default"
       source:
