@@ -12,13 +12,13 @@ spec:
           vcluster: "true"
   template:
     metadata:
-      name: '{{.name}}-ba-{{ randAlpha 6 | lower }}' # 'name' field of the Secret
+      name: '{{.name}}-ba' # 'name' field of the Secret
     spec:
       project: "default"
       source:
         repoURL: https://github.com/argo-multiverse-labs/basic-app
         targetRevision: main
-        path: app-chart-cm
+        path: app-chart
       destination:
         server: '{{.server}}' # 'server' field of the secret
         namespace: apps
