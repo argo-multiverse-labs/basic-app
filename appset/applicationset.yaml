@@ -12,7 +12,7 @@ spec:
           vcluster: "true"
   template:
     metadata:
-      name: '{{.name}}-ba' # 'name' field of the Secret
+      name: '{{.name}}-ba-{{ randAlpha 6 | lower }}' # 'name' field of the Secret
     spec:
       project: "default"
       source:
