@@ -3,13 +3,13 @@ kind: ApplicationSet
 metadata:
   name: basic-app
 spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
+  # goTemplate: true
+  # goTemplateOptions: ["missingkey=error"]
   generators:
   - clusters: {} # Automatically use all clusters defined within Argo CD
   template:
     metadata:
-      name: '{{.name}}-guestbook' # 'name' field of the Secret
+      name: '{{name}}-basic-app' # 'name' field of the Secret
     spec:
       project: "default"
       source:
@@ -17,7 +17,7 @@ spec:
         targetRevision: main
         path: app-chart
       destination:
-        server: '{{.server}}' # 'server' field of the secret
+        server: '{{server}}' # 'server' field of the secret
         namespace: apps
       syncPolicy:
         automated:
