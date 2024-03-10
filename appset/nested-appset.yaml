@@ -31,7 +31,7 @@ spec:
               elements:
                 - name: app1
                   version: v1.0
-                - name: app2
+                - name: nested-generators-appset
                   version: v2.0
           - git:
               repoURL: https://github.com/argo-multiverse-labs/basic-app
