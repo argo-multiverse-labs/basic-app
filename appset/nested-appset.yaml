@@ -20,7 +20,7 @@ spec:
                   replicas: "3"
     - git:
         repoURL: https://github.com/argo-multiverse-labs/basic-app
-        revision: HEAD
+        revision: main
         directories:
           - path: app-chart
     - merge:
@@ -35,7 +35,7 @@ spec:
                   version: v2.0
           - git:
               repoURL: https://github.com/argo-multiverse-labs/basic-app
-              revision: HEAD
+              revision: main
               files:
                 - path: appset/*.yaml
     - pullRequest:
