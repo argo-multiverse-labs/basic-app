@@ -24,7 +24,8 @@ spec:
         directories:
           - path: app-chart
     - merge:
-        mergeKeys: []
+        mergeKeys:
+          - name
         generators:
           - list:
               elements:
