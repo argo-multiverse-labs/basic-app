@@ -25,7 +25,7 @@ spec:
           - path: app-chart
     - merge:
         mergeKeys:
-          - values.selector
+          - version
         generators:
           - list:
               elements:
@@ -38,6 +38,13 @@ spec:
               revision: HEAD
               files:
                 - path: appset/*.yaml
+    - pullRequest:
+        github:
+          owner: argo-multiverse-labs
+          repo: basic-app
+          labels:
+            - preview
+        requeueAfterSeconds: 300
   template:
     metadata:
       name: '{{name}}-{{env}}-{{cluster.name}}-{{version}}'
