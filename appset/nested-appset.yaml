@@ -25,7 +25,7 @@ spec:
           - path: app-chart
     - merge:
         mergeKeys:
-          - name
+          - values.selector
         generators:
           - list:
               elements:
