@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: basic-appset
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            vcluster: "true"
+  template:
+    metadata:
+      name: '{{.name}}-ba-{{ randAlpha 6 | lower }}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/argo-multiverse-labs/basic-app
+        targetRevision: main
+        path: appset
+      destination:
+        server: '{{.server}}'
+        namespace: apps
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
