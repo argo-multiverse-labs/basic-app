@@ -6,7 +6,7 @@ spec:
   generators:
     - matrix:
         generators:
-          - cluster:
+          - clusters:
               selector:
                 matchLabels:
                   vcluster: "true"
