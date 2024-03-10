@@ -6,24 +6,10 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-    - matrix:
-        generators:
-          - clusters:
-              selector:
-                matchLabels:
-                  vcluster: "true"
-          - matrix:
-              generators:
-                - clusters:
-                    selector:
-                      matchLabels:
-                        vcluster: "true"
-                - matrix:
-                    generators:
-                      - clusters:
-                          selector:
-                            matchLabels:
-                              vcluster: "true"
+    - clusters:
+        selector:
+          matchLabels:
+            vcluster: "true"
   template:
     metadata:
       name: '{{.name}}-ba-{{ uuidv4 | trunc 10}}'
