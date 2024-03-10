@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: basic-matrix
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  vcluster: "true"
+          - matrix:
+              generators:
+                - clusters:
+                    selector:
+                      matchLabels:
+                        vcluster: "true"
+                - matrix:
+                    generators:
+                      - clusters:
+                          selector:
+                            matchLabels:
+                              vcluster: "true"
+  template:
+    metadata:
+      name: '{{.name}}-ba-{{ uuidv4 | trunc 10}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/argo-multiverse-labs/basic-app
+        targetRevision: main
+        path: app-chart
+      destination:
+        server: '{{.server}}'
+        namespace: apps
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
