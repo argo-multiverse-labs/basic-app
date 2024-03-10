@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nested-generators-appset
+spec:
+  generators:
+    - matrix:
+        generators:
+          - cluster:
+              selector:
+                matchLabels:
+                  vcluster: "true"
+          - list:
+              elements:
+                - env: dev
+                  replicas: 1
+                - env: staging
+                  replicas: 2
+                - env: prod
+                  replicas: 3
+    - git:
+        repoURL: https://github.com/argo-multiverse-labs/basic-app
+        revision: HEAD
+        directories:
+          - path: app-chart
+    - merge:
+        generators:
+          - list:
+              elements:
+                - name: app1
+                  version: v1.0
+                - name: app2
+                  version: v2.0
+          - git:
+              repoURL: https://github.com/argo-multiverse-labs/basic-app
+              revision: HEAD
+              files:
+                - path: appset/*.yaml
+  template:
+    metadata:
+      name: '{{name}}-{{env}}-{{cluster.name}}-{{version}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/argo-multiverse-labs/basic-app
+        targetRevision: '{{version}}'
+        path: '{{path}}'
+      destination:
+        server: '{{cluster.server}}'
+        namespace: apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+      replicas: '{{replicas}}'
