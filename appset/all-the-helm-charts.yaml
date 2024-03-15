@@ -34,7 +34,7 @@ spec:
       source:
         repoURL: https://github.com/bitnami/charts.git
         targetRevision: main
-        path: '{{.path}}'
+        path: '{{.path.path}}'
       destination:
         server: '{{.server}}'
         namespace: apps
