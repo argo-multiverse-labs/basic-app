@@ -3,8 +3,8 @@ kind: ApplicationSet
 metadata:
   name: all-helm-charts
 spec:
-  # goTemplate: true
-  # goTemplateOptions: ["missingkey=error"]
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -28,15 +28,15 @@ spec:
                   vcluster: "true"
   template:
     metadata:
-      name: '{{path.basename}}-{{version}}'
+      name: '{{.path.basename}}-{{version}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/bitnami/charts.git
         targetRevision: main
-        path: '{{path}}'
+        path: '{{.path}}'
       destination:
-        server: '{{server}}'
+        server: '{{.server}}'
         namespace: apps
       syncPolicy:
         automated:
