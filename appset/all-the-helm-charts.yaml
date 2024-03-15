@@ -3,8 +3,8 @@ kind: ApplicationSet
 metadata:
   name: all-helm-charts
 spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
+  # goTemplate: true
+  # goTemplateOptions: ["missingkey=error"]
   generators:
   - matrix:
       generators:
@@ -28,15 +28,15 @@ spec:
                 vcluster: "true"
   template:
     metadata:
-      name: '{{.name}}-{{.releaseName}}'
+      name: '{{name}}-{{releaseName}}'
     spec:
       project: default
       source:
-        chart:  '{{.path.basename}}'
-        repoURL: '{{.repoURL}}'
-        targetRevision: '{{.targetRevision}}'
+        chart:  '{{path.basename}}'
+        repoURL: '{{repoURL}}'
+        targetRevision: '{{targetRevision}}'
         helm:
-          releaseName: '{{.releaseName}}'
+          releaseName: '{{releaseName}}'
       destination:
         server: '{{.server}}'
         namespace: apps
