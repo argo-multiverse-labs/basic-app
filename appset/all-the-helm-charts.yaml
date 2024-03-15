@@ -28,7 +28,7 @@ spec:
                   vcluster: "true"
   template:
     metadata:
-      name: '{{.path.basename}}-{{version}}'
+      name: '{{.path.basename}}-{{.version}}'
     spec:
       project: default
       source:
