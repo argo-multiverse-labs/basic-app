@@ -21,7 +21,7 @@ spec:
                 repoURL: https://github.com/bitnami/charts.git
                 revision: main
                 files:
-                - path: bitnami/**/Chart.yaml
+                - path: "bitnami/**/Chart.yaml"
         - clusters:
             selector:
               matchLabels:
