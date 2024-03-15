@@ -33,7 +33,7 @@ spec:
           # Set the selector to this location.
           - clusters:
               values:
-                selector: '{{index .metadata.labels "generate.kyverno.io/trigger-namespace"}}'
+                selector: '{{index .name}}'
           # The git repo may have different directories which correspond to the
           # cluster locations, using these as a selector.
           - git:
