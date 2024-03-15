@@ -1,70 +1,70 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: nested-generators-appset
-spec:
-  generators:
-    - matrix:
-        generators:
-          - clusters:
-              selector:
-                matchLabels:
-                  vcluster: "true"
-          - list:
-              elements:
-                - env: dev
-                  replicas: "1"
-                - env: staging
-                  replicas: "2"
-                - env: prod
-                  replicas: "3"
-    - git:
-        repoURL: https://github.com/argo-multiverse-labs/basic-app
-        revision: main
-        directories:
-          - path: app-chart
-    - merge:
-        mergeKeys:
-          - server
-          - environment
-        generators:
-          - matrix:
-              generators:
-                - clusters:
-                    values:
-                      replicaCount: '2'
-                - list:
-                    elements:
-                      - environment: staging
-                        namespace: guestbook-non-prod
-                      - environment: prod
-                        namespace: guestbook
-          - list:
-              elements:
-                - server: https://kubernetes.default.svc
-                  environment: staging
-                  values.replicaCount: '1'
-    - pullRequest:
-        github:
-          owner: argo-multiverse-labs
-          repo: basic-app
-          labels:
-            - preview
-        requeueAfterSeconds: 300
-  template:
-    metadata:
-      name: '{{name}}-{{env}}-{{cluster.name}}-{{version}}'
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/argo-multiverse-labs/basic-app
-        targetRevision: '{{version}}'
-        path: '{{path}}'
-      destination:
-        server: '{{cluster.server}}'
-        namespace: apps
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-      replicas: '{{replicas}}'
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: nested-generators-appset
+# spec:
+#   generators:
+#     - matrix:
+#         generators:
+#           - clusters:
+#               selector:
+#                 matchLabels:
+#                   vcluster: "true"
+#           - list:
+#               elements:
+#                 - env: dev
+#                   replicas: "1"
+#                 - env: staging
+#                   replicas: "2"
+#                 - env: prod
+#                   replicas: "3"
+#     - git:
+#         repoURL: https://github.com/argo-multiverse-labs/basic-app
+#         revision: main
+#         directories:
+#           - path: app-chart
+#     - merge:
+#         mergeKeys:
+#           - server
+#           - environment
+#         generators:
+#           - matrix:
+#               generators:
+#                 - clusters:
+#                     values:
+#                       replicaCount: '2'
+#                 - list:
+#                     elements:
+#                       - environment: staging
+#                         namespace: guestbook-non-prod
+#                       - environment: prod
+#                         namespace: guestbook
+#           - list:
+#               elements:
+#                 - server: https://kubernetes.default.svc
+#                   environment: staging
+#                   values.replicaCount: '1'
+#     - pullRequest:
+#         github:
+#           owner: argo-multiverse-labs
+#           repo: basic-app
+#           labels:
+#             - preview
+#         requeueAfterSeconds: 300
+#   template:
+#     metadata:
+#       name: '{{name}}-{{env}}-{{cluster.name}}-{{version}}'
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/argo-multiverse-labs/basic-app
+#         targetRevision: '{{version}}'
+#         path: '{{path}}'
+#       destination:
+#         server: '{{cluster.server}}'
+#         namespace: apps
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#       replicas: '{{replicas}}'
