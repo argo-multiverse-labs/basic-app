@@ -25,24 +25,25 @@ spec:
           - path: app-chart
     - merge:
         mergeKeys:
-          # Note that this would not work with goTemplate enabled,
-          # nested merge keys are not supported there.
-          - values.selector
+          - server
+          - environment
         generators:
-          # Assuming, all configured clusters have a label for their location:
-          # Set the selector to this location.
-          - clusters:
-              values:
-                selector: '{{index .name}}'
-          # The git repo may have different directories which correspond to the
-          # cluster locations, using these as a selector.
-          - git:
-              repoURL: https://github.com/argoproj/argocd-example-apps/
-              revision: HEAD
-              directories:
-              - path: '*'
-              values:
-                selector: '{{.path.path}}'
+          - matrix:
+              generators:
+                - clusters:
+                    values:
+                      replicaCount: '2'
+                - list:
+                    elements:
+                      - environment: staging
+                        namespace: guestbook-non-prod
+                      - environment: prod
+                        namespace: guestbook
+          - list:
+              elements:
+                - server: https://kubernetes.default.svc
+                  environment: staging
+                  values.replicaCount: '1'
     - pullRequest:
         github:
           owner: argo-multiverse-labs
