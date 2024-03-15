@@ -25,19 +25,24 @@ spec:
           - path: app-chart
     - merge:
         mergeKeys:
-          - name
+          # Note that this would not work with goTemplate enabled,
+          # nested merge keys are not supported there.
+          - values.selector
         generators:
-          - list:
-              elements:
-                - name: app1
-                  version: v1.0
-                - name: nested-generators-appset
-                  version: v2.0
+          # Assuming, all configured clusters have a label for their location:
+          # Set the selector to this location.
+          - clusters:
+              values:
+                selector: '{{index .metadata.labels "location"}}'
+          # The git repo may have different directories which correspond to the
+          # cluster locations, using these as a selector.
           - git:
-              repoURL: https://github.com/argo-multiverse-labs/basic-app
-              revision: main
-              files:
-                - path: appset/*.yaml
+              repoURL: https://github.com/argoproj/argocd-example-apps/
+              revision: HEAD
+              directories:
+              - path: '*'
+              values:
+                selector: '{{.path.path}}'
     - pullRequest:
         github:
           owner: argo-multiverse-labs
