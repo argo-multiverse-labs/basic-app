@@ -1,44 +1,44 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: all-helm-charts
-spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
-  generators:
-    - matrix:
-        generators:
-          - merge:
-              mergeKeys:
-                - path
-              generators:
-                - git:
-                    repoURL: https://github.com/bitnami/charts.git
-                    revision: main
-                    directories:
-                    - path: bitnami/*
-                - git:
-                    repoURL: https://github.com/bitnami/charts.git
-                    revision: main
-                    files:
-                    - path: "bitnami/**/Chart.yaml"
-          - clusters:
-              selector:
-                matchLabels:
-                  vcluster: "true"
-  template:
-    metadata:
-      name: '{{.path.basename}}-{{.name}}'
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/bitnami/charts.git
-        targetRevision: main
-        path: '{{.path.path}}'
-      destination:
-        server: '{{.server}}'
-        namespace: apps
-      syncPolicy:
-        automated:
-          selfHeal: true
-          prune: true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: all-helm-charts
+# spec:
+#   goTemplate: true
+#   goTemplateOptions: ["missingkey=error"]
+#   generators:
+#     - matrix:
+#         generators:
+#           - merge:
+#               mergeKeys:
+#                 - path
+#               generators:
+#                 - git:
+#                     repoURL: https://github.com/bitnami/charts.git
+#                     revision: main
+#                     directories:
+#                     - path: bitnami/*
+#                 - git:
+#                     repoURL: https://github.com/bitnami/charts.git
+#                     revision: main
+#                     files:
+#                     - path: "bitnami/**/Chart.yaml"
+#           - clusters:
+#               selector:
+#                 matchLabels:
+#                   vcluster: "true"
+#   template:
+#     metadata:
+#       name: '{{.path.basename}}-{{.name}}'
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/bitnami/charts.git
+#         targetRevision: main
+#         path: '{{.path.path}}'
+#       destination:
+#         server: '{{.server}}'
+#         namespace: apps
+#       syncPolicy:
+#         automated:
+#           selfHeal: true
+#           prune: true
