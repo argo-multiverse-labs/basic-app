@@ -4,15 +4,26 @@ metadata:
   name: all-helm-charts
 spec:
   generators:
-    - git:
-        repoURL: https://github.com/bitnami/charts.git
-        revision: HEAD
-        files:
-        - path: bitnami/**/values.yaml
-    - clusters:
-        selector:
-          matchLabels:
-            vcluster: "true"
+  - matrix:
+      generators:
+        - merge:
+          mergeKeys:
+            - path
+          generators:
+            - git:
+                repoURL: https://github.com/bitnami/charts.git
+                revision: HEAD
+                directories:
+                - path: bitnami/*
+            - git:
+                repoURL: https://github.com/bitnami/charts.git
+                revision: HEAD
+                files:
+                - path: bitnami/**/values.yaml
+        - clusters:
+            selector:
+              matchLabels:
+                vcluster: "true"
   template:
     metadata:
       name: '{{cluster}}-{{releaseName}}'
