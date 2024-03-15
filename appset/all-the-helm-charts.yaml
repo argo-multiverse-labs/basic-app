@@ -14,12 +14,12 @@ spec:
           generators:
             - git:
                 repoURL: https://github.com/bitnami/charts.git
-                revision: HEAD
+                revision: main
                 directories:
                 - path: bitnami/*
             - git:
                 repoURL: https://github.com/bitnami/charts.git
-                revision: HEAD
+                revision: main
                 files:
                 - path: bitnami/**/values.yaml
         - clusters:
@@ -38,7 +38,7 @@ spec:
         helm:
           releaseName: '{{releaseName}}'
       destination:
-        server: '{{.server}}'
+        server: '{{server}}'
         namespace: apps
       syncPolicy:
         syncOptions:
