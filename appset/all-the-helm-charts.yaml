@@ -6,27 +6,32 @@ spec:
   # goTemplate: true
   # goTemplateOptions: ["missingkey=error"]
   generators:
-    - merge:
-        mergeKeys:
-          - path
+    - matrix:
         generators:
-          - git:
-              repoURL: https://github.com/bitnami/charts.git
-              revision: main
-              directories:
-              - path: bitnami/*
-          - git:
-              repoURL: https://github.com/bitnami/charts.git
-              revision: main
-              files:
-              - path: "bitnami/**/Chart.yaml"
+          - merge:
+              mergeKeys:
+                - path
+              generators:
+                - git:
+                    repoURL: https://github.com/bitnami/charts.git
+                    revision: main
+                    directories:
+                    - path: bitnami/*
+                - git:
+                    repoURL: https://github.com/bitnami/charts.git
+                    revision: main
+                    files:
+                    - path: "bitnami/**/Chart.yaml"
+          - clusters:
+              selector:
+                matchLabels:
+                  vcluster: "true"
   template:
     metadata:
-      name: '{{name}}-{{version}}'
+      name: '{{path.basename}}-{{version}}'
     spec:
       project: default
       source:
-        chart:  '{{path.basename}}'
         repoURL: https://github.com/bitnami/charts.git
         targetRevision: main
         path: '{{path}}'
