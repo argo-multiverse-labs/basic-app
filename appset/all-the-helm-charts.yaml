@@ -27,16 +27,13 @@ spec:
       project: default
       source:
         chart:  '{{path.basename}}'
-        repoURL: '{{repoURL}}'
-        targetRevision: '{{version}}'
-        helm:
-          releaseName: '{{name}}'
+        repoURL: https://github.com/bitnami/charts.git
+        targetRevision: main
+        path: {{path}}
       destination:
         server: '{{server}}'
         namespace: apps
       syncPolicy:
-        syncOptions:
-        - CreateNamespace=true
         automated:
           selfHeal: true
           prune: true
