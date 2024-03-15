@@ -22,15 +22,15 @@ spec:
               - path: "bitnami/**/Chart.yaml"
   template:
     metadata:
-      name: '{{name}}-{{releaseName}}'
+      name: '{{name}}-{{version}}'
     spec:
       project: default
       source:
         chart:  '{{path.basename}}'
         repoURL: '{{repoURL}}'
-        targetRevision: '{{targetRevision}}'
+        targetRevision: '{{version}}'
         helm:
-          releaseName: '{{releaseName}}'
+          releaseName: '{{name}}'
       destination:
         server: '{{server}}'
         namespace: apps
