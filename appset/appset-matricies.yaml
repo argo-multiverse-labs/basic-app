@@ -1,35 +1,35 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: nested-matrix-test
-spec:
-  generators:
-    - matrix:
-        generators:
-          - list:
-              elements:
-                - name: app1
-          - matrix:
-              generators:
-                - list:
-                    elements:
-                      - cluster: dev
-                - list:
-                    elements:
-                      - env: staging
-  template:
-    metadata:
-      name: '{{name}}-{{cluster}}-{{env}}'
-    spec:
-      project: default
-      source:
-        repoURL: 'https://github.com/argo-multiverse-labs/basic-app'
-        targetRevision: HEAD
-        path: 'app-chart'
-      destination:
-        server: 'https://kubernetes.default.svc'
-        namespace: 'apps'
-      syncPolicy:
-        automated:
-          selfHeal: true
-          prune: true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: nested-matrix-test
+# spec:
+#   generators:
+#     - matrix:
+#         generators:
+#           - list:
+#               elements:
+#                 - name: app1
+#           - matrix:
+#               generators:
+#                 - list:
+#                     elements:
+#                       - cluster: dev
+#                 - list:
+#                     elements:
+#                       - env: staging
+#   template:
+#     metadata:
+#       name: '{{name}}-{{cluster}}-{{env}}'
+#     spec:
+#       project: default
+#       source:
+#         repoURL: 'https://github.com/argo-multiverse-labs/basic-app'
+#         targetRevision: HEAD
+#         path: 'app-chart'
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: 'apps'
+#       syncPolicy:
+#         automated:
+#           selfHeal: true
+#           prune: true
