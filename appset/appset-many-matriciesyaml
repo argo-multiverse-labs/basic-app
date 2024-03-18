@@ -1,0 +1,78 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: many-nested-matrix-appset
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - env: dev
+                  replicas: 1
+                - env: prod
+                  replicas: 3
+          - matrix:
+              generators:
+                - clusters: {}
+                - matrix:
+                    generators:
+                      - git:
+                          repoURL: https://github.com/argo-multiverse-labs/basic-app
+                          revision: HEAD
+                          directories:
+                            - path: app-chart
+                      - matrix:
+                          generators:
+                            - list:
+                                elements:
+                                  - name: app1
+                                    version: v1.0
+                                  - name: app2
+                                    version: v2.0
+                            - matrix:
+                                generators:
+                                  - list:
+                                      elements:
+                                        - size: small
+                                          resources:
+                                            cpu: 100m
+                                            memory: 128Mi
+                                        - size: large
+                                          resources:
+                                            cpu: 500m
+                                            memory: 512Mi
+                                  - matrix:
+                                      generators:
+                                        - list:
+                                            elements:
+                                              - strategy: rolling
+                                              - strategy: recreate
+                                        - list:
+                                            elements:
+                                              - image: nginx
+                                              - image: apache
+  template:
+    metadata:
+      name: '{{ .name }}-{{ .env }}-{{ .cluster.name }}-{{ .version }}-{{ .size }}'
+    spec:
+      project: default
+      source:
+        repoURL: '{{ .path.repoURL }}'
+        targetRevision: '{{ .path.revision }}'
+        path: '{{ .path.path }}'
+        helm:
+          parameters:
+            - name: replicaCount
+              value: '{{ .replicas }}'
+            - name: resources
+              value: '{{ toYaml .resources }}'
+      destination:
+        server: '{{ .cluster.server }}'
+        namespace: apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
