@@ -1,0 +1,6 @@
+time="2024-03-15T01:57:35Z" level=info msg="ArgoCD Dex Server is starting" built="2024-03-01T21:24:51Z" commit=fcf5d8c2381b68ab1621b90be63913b12cca2eb7 namespace=argocd version=v2.10.2+fcf5d8c
+time="2024-03-15T01:57:35Z" level=info msg="Generating self-signed TLS certificate for this session"
+time="2024-03-15T01:57:36Z" level=info msg="Starting configmap/secret informers"
+time="2024-03-15T01:57:36Z" level=info msg="Configmap/secret informer synced"
+time="2024-03-15T01:57:36Z" level=info msg="0x4000f32f00 subscribed to settings updates"
+time="2024-03-15T01:57:36Z" level=info msg="dex is not configured"

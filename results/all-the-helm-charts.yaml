@@ -1,0 +1,48 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: all-helm-charts
+# spec:
+#   # goTemplate: true
+#   # goTemplateOptions: ["missingkey=error"]
+#   generators:
+#   - matrix:
+#       generators:
+#         - merge:
+#           mergeKeys:
+#             - path
+#           generators:
+#             - git:
+#                 repoURL: https://github.com/bitnami/charts.git
+#                 revision: main
+#                 directories:
+#                 - path: bitnami/*
+#             - git:
+#                 repoURL: https://github.com/bitnami/charts.git
+#                 revision: main
+#                 files:
+#                 - path: "bitnami/**/Chart.yaml"
+#         - clusters:
+#             selector:
+#               matchLabels:
+#                 vcluster: "true"
+#   template:
+#     metadata:
+#       name: '{{name}}-{{releaseName}}'
+#     spec:
+#       project: default
+#       source:
+#         chart:  '{{path.basename}}'
+#         repoURL: '{{repoURL}}'
+#         targetRevision: '{{targetRevision}}'
+#         helm:
+#           releaseName: '{{releaseName}}'
+#       destination:
+#         server: '{{server}}'
+#         namespace: apps
+#       syncPolicy:
+#         syncOptions:
+#         - CreateNamespace=true
+#         automated:
+#           selfHeal: true
+#           prune: true
